@@ -35,6 +35,7 @@ CREATE TABLE activities (
   id BINARY(16) NOT NULL PRIMARY KEY,
   title VARCHAR(255) NOT NULL,
   description TEXT,
+  start_date DATETIME NOT NULL,
   due_date DATETIME NOT NULL,
   owner_id BINARY(16) NOT NULL,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -43,6 +44,22 @@ CREATE TABLE activities (
   reason_for_incompletion TEXT,
   size ENUM('small', 'medium', 'large') DEFAULT 'medium' NOT NULL,
   FOREIGN KEY (owner_id) REFERENCES users(id)
+);
+
+CREATE TABLE weekly_activities (
+  id BINARY(16) NOT NULL PRIMARY KEY,
+  user_id BINARY(16) NOT NULL,
+  activity_id BINARY(16) NOT NULL,
+  frequency INT NOT NULL,
+  monday TINYINT(1) NOT NULL DEFAULT 0,
+  tuesday TINYINT(1) NOT NULL DEFAULT 0,
+  wednesday TINYINT(1) NOT NULL DEFAULT 0,
+  thursday TINYINT(1) NOT NULL DEFAULT 0,
+  friday TINYINT(1) NOT NULL DEFAULT 0,
+  saturday TINYINT(1) NOT NULL DEFAULT 0,
+  sunday TINYINT(1) NOT NULL DEFAULT 0,
+  FOREIGN KEY (user_id) REFERENCES users(id),
+  FOREIGN KEY (activity_id) REFERENCES activities(id)
 );
 
 CREATE TABLE activity_co_owners (
