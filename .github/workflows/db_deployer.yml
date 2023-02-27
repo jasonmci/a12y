@@ -16,6 +16,16 @@ jobs:
         ports:
           - 3306:3306
         options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
+      api:
+        image: python:3.10.4
+        env:
+          MYSQL_HOST: mysql
+          MYSQL_USER: root
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          MYSQL_DATABASE: a12y
+        ports:
+          - 5000:5000
+        command: bash -c "pip install -r requirements.txt && python api/app.py"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -25,3 +35,5 @@ jobs:
         run: mysql -h 127.0.0.1 -P 3306 -u root -p${{ secrets.MYSQL_ROOT_PASSWORD }} < scripts/create_database_schema.sql
       - name: Show tables
         run: mysql -h 127.0.0.1 -P 3306 -u root -p${{ secrets.MYSQL_ROOT_PASSWORD }} -e "USE a12y; SHOW TABLES;"
+      - name: Test API
+        run: curl -s http://localhost:5000/test | grep "Test successful"
