@@ -23,3 +23,5 @@ jobs:
         run: mysql -h 127.0.0.1 -P 3306 -u root -p${{ secrets.MYSQL_ROOT_PASSWORD }} -e "SELECT 1"
       - name: Create tables
         run: mysql -h 127.0.0.1 -P 3306 -u root -p${{ secrets.MYSQL_ROOT_PASSWORD }} < scripts/create_database_schema.sql
+      - name: Show tables
+        run: mysql -h 127.0.0.1 -P 3306 -u root -p${{ secrets.MYSQL_ROOT_PASSWORD }} -e "SHOW TABLES"
