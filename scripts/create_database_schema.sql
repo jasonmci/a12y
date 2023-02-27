@@ -1,3 +1,6 @@
+CREATE DATABASE test_a12y;
+USE a12y;
+
 CREATE TABLE users (
   id BINARY(16) NOT NULL PRIMARY KEY,
   username VARCHAR(50) NOT NULL UNIQUE,
@@ -107,7 +110,7 @@ CREATE TABLE user_following (
   FOREIGN KEY (following_id) REFERENCES users(id)
 );
 
-CREATE TABLE groups (
+CREATE TABLE user_groups (
   id BINARY(16) NOT NULL PRIMARY KEY,
   name VARCHAR(255) NOT NULL,
   description TEXT
@@ -117,7 +120,7 @@ CREATE TABLE group_members (
   group_id BINARY(16) NOT NULL,
   user_id BINARY(16) NOT NULL,
   PRIMARY KEY (group_id, user_id),
-  FOREIGN KEY (group_id) REFERENCES groups(id),
+  FOREIGN KEY (group_id) REFERENCES user_groups(id),
   FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
@@ -131,7 +134,7 @@ CREATE TABLE group_activities (
   status ENUM('incomplete', 'complete', 'completed_late', 'cancelled') DEFAULT 'incomplete' NOT NULL,
   completed_at DATETIME,
   reason_for_incompletion TEXT,
-  FOREIGN KEY (group_id) REFERENCES groups(id)
+  FOREIGN KEY (group_id) REFERENCES user_groups(id)
 );
 
 CREATE TABLE group_activity_signups (
